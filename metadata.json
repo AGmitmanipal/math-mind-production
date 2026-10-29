@@ -1,0 +1,8 @@
+{
+  "name": "MathMind - AI Mathematics Learning Platform",
+  "description": "Interactive Socratic AI math tutor and mathematical playground that builds intuition, diagnoses misconceptions, and tracks concept mastery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

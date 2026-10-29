@@ -1,0 +1,1233 @@
+# MASTER BUILD PROMPT: Build a Production-Ready AI Mathematics Learning Platform
+
+Act as a senior full-stack engineer, AI/ML engineer, mathematics education researcher, product designer, security engineer, and SaaS architect.
+
+Your task is to build a complete, production-quality AI mathematics learning platform that can be launched commercially, tested with real students, and eventually sold as a subscription product.
+
+Do not build a generic chatbot with a math-themed interface.
+
+Build an interactive learning environment that helps students develop mathematical intuition, identify misconceptions, reason independently, and demonstrate genuine understanding.
+
+Working product name: **MathMind**. Keep the name, branding, and visual identity easy to change later.
+
+## 1. Product vision
+
+The central promise is:
+
+**Understand mathematics. Don't just get the answer.**
+
+A student should be able to enter a mathematical problem and work through it in an adaptive learning environment. Instead of simply reading a solution, the student interacts with equations, graphs, visualizations, questions, hints, and small experiments.
+
+The platform must combine five core capabilities:
+
+1. **Socratic AI tutor:** Guides students through problems one conceptual step at a time.
+2. **Interactive math playground:** Lets students manipulate equations, graphs, parameters, and mathematical objects.
+3. **Misconception diagnosis:** Identifies likely gaps in understanding through student responses and targeted questions.
+4. **Personalized mastery map:** Tracks demonstrated understanding of individual mathematical concepts and prerequisites.
+5. **Adaptive practice:** Selects follow-up activities based on the student's demonstrated strengths and weaknesses.
+
+The experience should feel like a combination of a personal mathematics tutor, an interactive scientific notebook, and a personalized learning platform.
+
+The differentiator is not the underlying language model. It is the learning experience, structured tutoring protocol, reliable mathematical verification, adaptive practice, and accumulated learning history.
+
+## 2. First inspect the existing repository
+
+Before writing code, inspect the entire existing project.
+
+Determine:
+
+- Which framework and libraries are already installed.
+- Which pages and components exist.
+- Whether authentication has already been implemented.
+- Whether Supabase, PostgreSQL, or another database is configured.
+- Whether an AI provider is already connected.
+- Which environment variables and database schemas already exist.
+- Which existing features work and which are incomplete.
+- Whether any tests or deployment configurations are available.
+
+Preserve working code and reuse existing infrastructure.
+
+If the project already uses Next.js and Supabase, continue using them unless there is a compelling technical reason not to. Do not replace working authentication, create a duplicate application, or introduce a second backend unnecessarily.
+
+If the project is empty, use this default architecture:
+
+- Frontend and application server: Next.js with TypeScript.
+- UI: React, Tailwind CSS, and accessible component primitives.
+- Authentication and database: Supabase Auth and PostgreSQL.
+- Database security: Supabase Row Level Security.
+- AI: A provider abstraction supporting a selected commercial or open-source model API.
+- Mathematical rendering: KaTeX.
+- Interactive graphs: a suitable plotting library such as Plotly.js or an equivalent.
+- Mathematical verification: deterministic code and symbolic mathematics tools where appropriate.
+- Deployment: production-capable hosting compatible with the selected architecture.
+
+Choose compatible, stable versions of libraries. Avoid unnecessary dependencies and document important architectural decisions.
+
+Do not stop after producing a plan. Implement the application, verify the actual functionality, fix failures, and finish with a working deployable product.
+
+## 3. Product experience and visual identity
+
+Create a premium, modern educational product.
+
+The interface should be clean, intelligent, calm, and professional—not childish, cluttered, or visually similar to a generic AI chat application.
+
+Design principles:
+
+- Excellent typography and mathematical notation.
+- Generous spacing and a clear visual hierarchy.
+- A consistent design system with reusable components.
+- Subtle animations only when they communicate state or progress.
+- Responsive desktop, tablet, and mobile layouts.
+- Accessible keyboard navigation and readable contrast.
+- Light and dark themes.
+- Skeleton loading states, useful empty states, and friendly error messages.
+- No fake statistics, fake testimonials, or invented user activity.
+
+The primary experience must center on the mathematical workspace, not a large chat transcript.
+
+Use a layout with:
+
+- A navigation sidebar for learning, practice, saved work, and progress.
+- A central problem workspace.
+- Contextual tutor guidance.
+- Interactive visualizations when relevant.
+- A clear current-step indicator.
+- A persistent input for mathematical questions or responses.
+
+Keep the workspace uncluttered and allow secondary panels to collapse on smaller screens.
+
+## 4. Landing page and marketing website
+
+Build a complete public-facing website.
+
+### Hero section
+
+Headline:
+
+**Stop memorizing steps. Start understanding math.**
+
+Supporting text:
+
+Meet your personal AI mathematics tutor. Explore problems interactively, discover why each step works, and build understanding that lasts.
+
+Primary CTA: **Start learning**
+
+Secondary CTA: **Explore an example**
+
+The hero should show a real, functioning sample of the tutoring interface, not a static screenshot pretending to be interactive.
+
+### Landing-page sections
+
+Implement:
+
+1. Hero and interactive product demonstration.
+2. How the learning experience works.
+3. Interactive mathematical exploration.
+4. Personalized concept mastery.
+5. Adaptive explanations and hints.
+6. Supported mathematical topics.
+7. Sample learning session.
+8. Pricing plans driven by real application configuration.
+9. Frequently asked questions.
+10. Footer with product, legal, contact, and support links.
+
+Include appropriate metadata, Open Graph tags, a favicon, a sitemap, and a robots.txt configuration.
+
+Create separate pages for About, Contact, Privacy Policy, Terms of Service, and other necessary legal disclosures. Draft legal pages as templates requiring review, not as claims that legal compliance has been certified.
+
+Do not claim that the product guarantees learning outcomes or is more accurate than competitors without evidence.
+
+## 5. Authentication and user accounts
+
+Implement a complete authentication experience.
+
+Include:
+
+- Email registration.
+- Email verification.
+- Login and logout.
+- Password recovery and reset.
+- Supported OAuth login if correctly configured.
+- Protected application routes.
+- Session persistence.
+- Secure authorization checks.
+- Account settings.
+- Profile editing.
+- Account deletion and data deletion workflows.
+- Appropriate handling of expired sessions.
+
+Reuse existing Supabase authentication if present.
+
+Never store passwords directly. Never expose service-role keys, AI API keys, or privileged credentials in browser code.
+
+Every server-side operation must verify the authenticated user's identity and authorization. Hiding a UI element is not authorization.
+
+If an external provider requires credentials that are unavailable, implement the integration properly and clearly document the required environment variables instead of pretending it is connected.
+
+## 6. Core feature: interactive AI mathematics tutor
+
+This is the heart of the platform.
+
+### 6.1 Problem input
+
+Users must be able to:
+
+- Type a mathematical problem.
+- Paste equations and expressions.
+- Enter a natural-language question.
+- Ask why a particular mathematical step is valid.
+- Request an alternative solution method.
+- Ask follow-up questions about the current concept.
+- Select a subject or difficulty if desired.
+
+Provide a few example prompts for first-time users.
+
+For the initial release, prioritize text input. Architect the input system so image, handwriting, and voice support can be added later without redesigning the entire application.
+
+### 6.2 Problem understanding
+
+When a problem is submitted, the tutoring engine should determine, as needed:
+
+- The mathematical domain.
+- The specific concept.
+- The prerequisite knowledge.
+- The expected difficulty.
+- A valid solution strategy.
+- The conceptual steps involved.
+- Which steps are suitable for interactive exploration.
+- Which claims require deterministic verification.
+
+The AI must not blindly trust its own calculations. Use mathematical verification where feasible.
+
+### 6.3 One conceptual step at a time
+
+Never immediately dump a long solution by default.
+
+Break the solution into meaningful conceptual steps.
+
+For each step, show:
+
+- Step number and title.
+- Relevant mathematical expression.
+- A concise explanation.
+- Why the step is valid.
+- The mathematical transformation being performed.
+- An interactive experiment or visualization when it improves understanding.
+- A question that tests the relevant concept.
+- Hint and explanation controls.
+
+Example problem:
+
+\(2x+5=15\)
+
+The tutor might begin:
+
+**Step 1: Isolate the term containing x.**
+
+We want to simplify the left side so that the variable becomes easier to isolate. What operation cancels the \(+5\)?
+
+The student can answer in natural language, select a mathematical action, or interact with an equation workspace.
+
+After the response, evaluate whether the student understands the relevant operation.
+
+If they do, continue.
+
+If they make a mistake, diagnose it and respond constructively.
+
+The student should control the pace. Provide a way to request a full solution when needed, but distinguish answer viewing from demonstrated understanding.
+
+### 6.4 Understanding must be demonstrated
+
+Do not rely only on a button labeled "I understand."
+
+Provide several response types:
+
+- I understand.
+- Explain differently.
+- Give me a hint.
+- Show an example.
+- Why is this step valid?
+- Let me try.
+- I think this step is incorrect.
+
+Ask a small conceptual question, request a prediction, or ask the student to perform the next transformation.
+
+Allow natural-language answers.
+
+Evaluate the mathematical meaning of the answer rather than exact keyword matches.
+
+A correct answer does not automatically establish complete mastery. A single mistake does not establish that a student lacks the concept.
+
+Represent uncertainty and gather additional evidence when necessary.
+
+### 6.5 Adaptive explanations
+
+When a student is confused, do not merely repeat the previous response.
+
+Select an appropriate teaching strategy:
+
+1. Explain in simpler language.
+2. Provide a numerical example.
+3. Use a real-world analogy.
+4. Show an interactive visual representation.
+5. Break the step into smaller substeps.
+6. Explain the prerequisite concept.
+7. Ask a diagnostic question to locate the confusion.
+8. Compare a correct approach with a common incorrect approach.
+9. Let the student attempt a similar problem.
+
+Keep explanations connected to the original problem.
+
+If the student temporarily needs prerequisite instruction, provide it without losing the original problem state. Then return to the exact step where they were stuck.
+
+### 6.6 Progressive hints
+
+Implement a contextual hint system.
+
+- Hint 1: A conceptual nudge.
+- Hint 2: A more specific direction.
+- Hint 3: A near-complete procedural hint.
+- Show solution: Reveal the complete step or solution when requested.
+
+Hints must relate to the current step, not be generic suggestions.
+
+Avoid penalizing students for asking for help.
+
+### 6.7 Final solution
+
+When the problem is completed, display:
+
+- Verified final answer where verification is possible.
+- A concise solution summary.
+- The important concepts used.
+- Common mistakes to avoid.
+- A relevant follow-up exercise.
+- A way to revisit difficult steps.
+- A transparent explanation of any uncertainty in the result.
+
+Offer three actions:
+
+- Practice a similar problem.
+- Explore another solution method.
+- Return to the learning dashboard.
+
+## 7. The interactive mathematics playground
+
+This feature must create a clear difference between MathMind and a standard AI chat interface.
+
+Build a reusable interactive mathematical workspace with specialized tools selected according to the problem.
+
+### 7.1 Algebra balance workspace
+
+For suitable equations, visualize equality using a balance metaphor or equivalent symbolic interface.
+
+Allow supported operations to be applied to both sides.
+
+Show how the equation changes after each operation.
+
+Explain why performing the same valid operation on both sides preserves equality, subject to the operation's mathematical constraints.
+
+Prevent unsupported transformations or explain their limitations.
+
+### 7.2 Function explorer
+
+Provide an interactive graphing tool for mathematical functions.
+
+Support, as appropriate:
+
+- Cartesian graphs.
+- Multiple functions on the same plot.
+- Adjustable parameters.
+- Zooming and panning.
+- Coordinate inspection.
+- Graph and equation synchronization.
+- Domain restrictions where relevant.
+
+Example:
+
+For \(y=ax^2\), provide an adjustable parameter \(a\). The graph must update when the slider changes.
+
+The tutor can ask the student to predict what will happen before revealing an explanation.
+
+### 7.3 Calculus explorer
+
+Where appropriate, visualize:
+
+- Functions and tangent lines.
+- Secant lines approaching tangents.
+- Derivative behavior.
+- Areas under curves.
+- Numerical approximation of definite integrals.
+- The relationship between a function and its derivative.
+
+Make the mathematical assumptions and numerical approximations clear.
+
+Do not fabricate visualizations that are unrelated to the mathematical problem.
+
+### 7.4 Additional visualization tools
+
+Design an extensible visualization registry that can eventually support:
+
+- Trigonometric graphs.
+- Geometric constructions.
+- Vectors.
+- Matrices.
+- Probability distributions.
+- Statistical plots.
+- Complex numbers.
+- Parametric curves.
+
+Implement a focused initial set fully rather than displaying nonfunctional placeholders for every topic.
+
+### 7.5 Safe mathematical interaction
+
+Do not execute arbitrary JavaScript or Python generated by the AI.
+
+Represent mathematical actions using validated, structured data and a predefined set of supported operations.
+
+Validate inputs, limits, parameters, and operation types before rendering or evaluating expressions.
+
+## 8. Multiple solution paths
+
+For problems with multiple valid methods, provide an optional "Compare methods" feature.
+
+For example, quadratic equations may be solved by:
+
+- Factorization.
+- Completing the square.
+- The quadratic formula.
+- Graphical analysis.
+
+Show the methods side by side where useful.
+
+Explain:
+
+- Why each method works.
+- Which prerequisites it requires.
+- When it is useful.
+- What the methods have in common.
+- Whether one method is more efficient for the current problem.
+
+Do not force multiple methods for problems where they add little value.
+
+The AI should not invent a method merely to fill the interface.
+
+## 9. Misconception diagnosis engine
+
+Create a structured system for identifying likely misunderstandings.
+
+Track distinct error categories such as:
+
+- Arithmetic error.
+- Sign error.
+- Invalid algebraic transformation.
+- Incorrect application of a formula.
+- Conceptual misunderstanding.
+- Missing prerequisite knowledge.
+- Misinterpretation of the problem.
+- Correct method with an execution mistake.
+- Unclear or insufficient student response.
+
+These are hypotheses about a student's reasoning, not definitive psychological diagnoses.
+
+When an error occurs:
+
+1. Identify the observed error.
+2. Estimate the likely misconception.
+3. Ask a targeted follow-up question if needed.
+4. Provide a short diagnostic example.
+5. Update the misconception assessment based on new evidence.
+6. Offer a suitable explanation or exercise.
+7. Revisit the original problem.
+
+Maintain a distinction between observed mistakes and inferred knowledge gaps.
+
+Avoid labeling students negatively.
+
+## 10. Personalized concept mastery map
+
+Build a visual map of mathematical concepts and their prerequisites.
+
+For example:
+
+Algebra
+- Arithmetic operations
+- Fractions
+- Negative numbers
+- Linear equations
+- Polynomials
+- Quadratic equations
+- Functions
+
+Calculus
+- Functions
+- Graph interpretation
+- Limits
+- Derivatives
+- Applications of derivatives
+- Integrals
+
+Represent prerequisites as a directed graph where appropriate.
+
+For each concept, track:
+
+- Whether it has been introduced.
+- Evidence of correct understanding.
+- Recent mistakes.
+- Independent practice results.
+- Use of hints.
+- Performance across different problems.
+- Time and recency of demonstrated understanding.
+- Recommended next activity.
+
+Use a transparent, configurable mastery-estimation algorithm initially. Do not pretend a heuristic score is a scientifically validated measure of knowledge.
+
+Distinguish between:
+
+- Not yet assessed.
+- Learning.
+- Developing.
+- Demonstrated understanding.
+- Needs review.
+
+Allow the user to open a concept, see the supporting evidence, and practice it directly.
+
+Do not infer mastery merely because a student viewed an explanation.
+
+## 11. Adaptive practice and spaced review
+
+Create a personalized practice engine.
+
+Generate practice problems based on:
+
+- The student's selected topic.
+- Their current level.
+- Recently encountered misconceptions.
+- Prerequisite gaps.
+- Previously demonstrated understanding.
+- Desired challenge level.
+
+Support:
+
+- Guided practice.
+- Independent practice.
+- Mixed-topic practice.
+- Revision sessions.
+- Similar problems with changed parameters.
+- Problems requiring transfer of knowledge to a new context.
+
+When generating problems, verify answers and validate the problem before presenting it.
+
+Use deterministic generators for suitable problem families where possible. Use the AI for contextual explanations and more open-ended problems.
+
+Implement a simple, configurable spaced-review schedule. Keep the algorithm replaceable so a better learning model can be introduced later.
+
+Avoid endless or compulsive engagement mechanics. Optimize for meaningful learning, not screen time.
+
+## 12. Mathematical subjects
+
+Design the content architecture to accommodate:
+
+- Arithmetic and number theory fundamentals.
+- Fractions, ratios, percentages, and exponents.
+- Algebra and equations.
+- Functions and coordinate geometry.
+- Geometry.
+- Trigonometry.
+- Limits and calculus.
+- Linear algebra.
+- Probability and statistics.
+- Discrete mathematics.
+- Differential equations.
+- Complex numbers.
+
+For the first release, fully validate a representative set of topics, such as linear equations, quadratic equations, functions, and introductory differentiation.
+
+Other topics can use the same tutoring framework as coverage expands.
+
+Do not claim comprehensive support for advanced mathematics until it has been tested.
+
+## 13. Math input and rendering
+
+Support:
+
+- LaTeX-rendered equations.
+- Inline and display mathematics.
+- Fractions, powers, roots, matrices, summations, integrals, and limits.
+- Copying equations.
+- Clear formatting for multi-step derivations.
+- Keyboard-friendly mathematical input.
+- Graceful handling of malformed expressions.
+
+Use KaTeX or another appropriate maintained rendering library.
+
+Sanitize and validate content before rendering. Never treat model-generated mathematical markup as trusted executable content.
+
+Plan for image uploads and handwriting recognition as future extensions, but implement them only when the necessary model, validation, and storage integrations are available.
+
+## 14. AI tutoring architecture
+
+Create a dedicated tutoring service independent of the frontend.
+
+Use a provider abstraction so the model can be changed without rewriting the product.
+
+Suggested conceptual architecture:
+
+Browser
+→ Authenticated application API
+→ Input validation and authorization
+→ Tutoring orchestrator
+→ AI provider and mathematical verification tools
+→ Structured response validation
+→ Session state update
+→ Interactive learning interface
+
+### AI response contract
+
+Use a versioned structured schema validated with a runtime validation library such as Zod.
+
+A response should contain appropriate fields such as:
+
+- Response type.
+- Current step identifier.
+- Step title.
+- Explanation.
+- Mathematical expressions.
+- Question or student action.
+- Expected mathematical concept.
+- Hint availability.
+- Supported interactive action.
+- Whether the current step is complete.
+- Verification status.
+- Next-step information when appropriate.
+
+Illustrative schema:
+
+{
+  "schemaVersion": 1,
+  "type": "teaching_step",
+  "stepId": "step_1",
+  "title": "Remove the constant",
+  "explanation": "Subtract 5 from both sides to isolate 2x.",
+  "question": "What operation cancels addition by 5?",
+  "expectedConcept": "inverse_operations",
+  "visualization": {
+    "type": "equation_balance",
+    "enabled": true
+  },
+  "verification": {
+    "status": "pending"
+  }
+}
+
+This is an illustrative contract, not a requirement to use exactly these fields.
+
+Define separate response types for:
+
+- Initial problem analysis.
+- Teaching a step.
+- Evaluating a student response.
+- Giving a hint.
+- Adapting an explanation.
+- Teaching a prerequisite.
+- Completing a problem.
+- Generating a practice problem.
+- Reporting an error.
+
+Validate all AI responses before using them.
+
+If the response is malformed, apply a controlled retry or safe recovery path. Do not blindly parse arbitrary model output or repeatedly retry expensive requests.
+
+### Tutoring system instructions
+
+The AI must:
+
+- Teach at the appropriate level.
+- Avoid dumping the complete solution by default.
+- Explain why mathematical operations are valid.
+- Ask focused questions.
+- Recognize equivalent mathematical answers.
+- Distinguish conceptual errors from arithmetic mistakes.
+- Adapt to student responses.
+- Keep track of the current problem and step.
+- Avoid repeating information unnecessarily.
+- Be respectful and encouraging.
+- Acknowledge uncertainty.
+- Correct its own errors when identified.
+- Never invent a verification result.
+- Never claim to know a student's understanding without sufficient evidence.
+- Preserve the original problem state while exploring prerequisites.
+- Return to the original problem after a clarification.
+- Avoid unnecessary chain-of-thought disclosures; provide useful mathematical reasoning and concise justifications instead.
+
+Use short, structured context rather than repeatedly sending an entire conversation history.
+
+Summarize older interactions when necessary, preserving the current step, established facts, relevant mistakes, and unresolved questions.
+
+### Mathematical verification
+
+Use deterministic checks wherever practical.
+
+Examples include:
+
+- Substituting a candidate solution into an equation.
+- Checking equality after a symbolic transformation.
+- Comparing equivalent expressions.
+- Validating polynomial roots.
+- Evaluating numerical approximations with stated tolerances.
+- Checking generated problems against their answer keys.
+
+For calculus and advanced symbolic mathematics, use appropriate symbolic or numerical tools where feasible.
+
+Treat numerical equivalence and symbolic equivalence carefully. Account for domains, singularities, extraneous roots, branch conditions, and approximation error when relevant.
+
+If the system cannot verify a result, communicate that limitation.
+
+Never present a successful model-generated response as mathematically verified unless a verification procedure actually succeeded.
+
+## 15. Conversation and session state
+
+Each tutoring session should track:
+
+- Original problem.
+- Problem interpretation.
+- Current topic and difficulty.
+- Solution strategy.
+- Current step.
+- Completed steps.
+- Student responses.
+- Hints requested.
+- Explanations already shown.
+- Observed mistakes.
+- Inferred misconceptions and confidence.
+- Verification results.
+- Current prerequisite detours.
+- Completion status.
+
+Use an explicit session state machine rather than relying on arbitrary chat text.
+
+A possible lifecycle:
+
+created → analyzing → teaching → awaiting_response → diagnosing → teaching_or_advancing → completed
+
+Include recovery states for network failures and invalid responses.
+
+Prevent duplicate submissions from creating duplicate steps or consuming unnecessary API requests.
+
+Persist session progress when appropriate so a user can resume later.
+
+A browser refresh must not destroy a saved session.
+
+## 16. Dashboard and student experience
+
+Build a useful authenticated dashboard with:
+
+- Continue learning.
+- Start a new problem.
+- Recent sessions.
+- Suggested topics.
+- Concepts to revisit.
+- Learning history.
+- Practice recommendations.
+- Saved problems.
+- A mastery-map preview.
+
+Display meaningful data only when it exists.
+
+Provide useful empty states for new users.
+
+Do not manufacture streaks, grades, activity, or progress to make the dashboard look populated.
+
+### Session history
+
+Allow users to:
+
+- Reopen previous problems.
+- Review completed steps.
+- Revisit explanations.
+- See mistakes and corrections.
+- Continue unfinished sessions.
+- Delete sessions.
+
+### Saved problems
+
+Allow students to bookmark problems and organize them by topic.
+
+### Progress reports
+
+Show evidence-based summaries of:
+
+- Concepts practiced.
+- Problems attempted.
+- Problems solved independently.
+- Hints used.
+- Repeated mistakes.
+- Concepts showing improvement.
+- Suggested review topics.
+
+Make it clear that the platform's mastery estimates are approximate.
+
+## 17. Database design
+
+Create a well-structured relational schema with migrations.
+
+Adapt it to the existing database if one already exists.
+
+Potential tables:
+
+### profiles
+- id
+- display_name
+- avatar_url
+- preferences
+- created_at
+- updated_at
+
+### tutoring_sessions
+- id
+- user_id
+- original_problem
+- normalized_problem
+- topic
+- difficulty
+- current_step_id
+- state
+- created_at
+- updated_at
+- completed_at
+
+### tutoring_steps
+- id
+- session_id
+- sequence_number
+- step_type
+- title
+- explanation
+- mathematical_content
+- verification_status
+- created_at
+
+### student_responses
+- id
+- session_id
+- step_id
+- response_content
+- response_type
+- evaluation
+- observed_error
+- created_at
+
+### concept_catalog
+- id
+- slug
+- name
+- description
+- subject
+- metadata
+
+### concept_prerequisites
+- concept_id
+- prerequisite_concept_id
+
+### student_concept_mastery
+- id
+- user_id
+- concept_id
+- mastery_state
+- confidence
+- evidence_count
+- last_assessed_at
+- updated_at
+
+### practice_attempts
+- id
+- user_id
+- problem_reference
+- concept_id
+- response
+- correctness
+- hint_count
+- completed_at
+
+### saved_problems
+- id
+- user_id
+- problem_content
+- title
+- topic
+- created_at
+
+### usage_events
+- id
+- user_id
+- event_type
+- relevant_metadata
+- created_at
+
+Use appropriate foreign keys, constraints, indexes, uniqueness rules, timestamps, and deletion policies.
+
+Avoid duplicating data unnecessarily.
+
+Do not store API keys, passwords, unnecessary personal information, or sensitive data in application records.
+
+Store only the minimum information required for learning functionality.
+
+## 18. Security and privacy
+
+Treat security as a core product requirement.
+
+Implement:
+
+- Server-side authorization.
+- Supabase Row Level Security for user-owned data.
+- Input validation.
+- Output validation.
+- Safe mathematical rendering.
+- Rate limiting.
+- Request-size limits.
+- Authentication checks on protected endpoints.
+- Secure cookie and session handling.
+- Safe error messages.
+- Secret management through environment variables.
+- Dependency vulnerability checks.
+- Protection against cross-user data access.
+- Appropriate handling of account deletion and session deletion.
+- Auditability for sensitive administrative operations.
+
+Prevent users from accessing another user's sessions, profile, progress, or saved problems by changing an identifier in a request.
+
+Never expose privileged database credentials to the client.
+
+Avoid logging full private tutoring transcripts or secrets unnecessarily.
+
+Provide a clear privacy notice explaining what data is stored, how it is used, and how users can request deletion.
+
+If children or minors may use the platform, assess applicable age, parental consent, privacy, and education-related requirements before commercial launch. Do not claim regulatory compliance without appropriate review.
+
+## 19. Commercial SaaS architecture
+
+Build the technical foundations for a sellable subscription product without prematurely adding complex billing workflows.
+
+Prepare:
+
+- Free and paid plan configuration.
+- Server-side entitlement checks.
+- Usage accounting.
+- AI request budgets.
+- Per-user rate limits.
+- Administrative configuration.
+- Billing-provider abstraction.
+- Subscription state.
+- Upgrade and downgrade flows.
+- Cancellation handling.
+- Billing webhooks with signature verification and idempotency.
+- Clear handling of failed payments and expired subscriptions.
+
+If implementing payments, use a supported payment provider appropriate for the launch market, such as Razorpay for India or Stripe where supported.
+
+Never trust a client-provided subscription status.
+
+Do not store raw payment-card information.
+
+Do not activate paid entitlements simply because the browser reports a successful checkout.
+
+Implement the billing integration end to end only when the required provider credentials and configuration are available. Otherwise, provide a clearly documented integration boundary and setup instructions.
+
+### Suggested initial plans
+
+Use configurable limits rather than hardcoding pricing throughout the codebase.
+
+- Free: limited tutoring and practice usage.
+- Plus: increased usage, saved learning history, and advanced interactive tools.
+- Pro: higher usage limits and additional advanced learning capabilities.
+
+These are provisional packaging ideas, not final pricing recommendations. Keep prices, limits, and feature entitlements editable through a central configuration or secure administrative system.
+
+## 20. AI cost, performance, and reliability
+
+Even though this is a production-oriented build, make the application efficient.
+
+Implement:
+
+- A single primary model call per meaningful interaction when possible.
+- Context-window management.
+- Appropriate timeouts.
+- Controlled retries with backoff.
+- Request cancellation where supported.
+- Rate limiting.
+- Idempotency for state-changing requests.
+- Usage accounting.
+- Provider error classification.
+- Graceful fallback messages.
+- Structured logging.
+- Latency measurements.
+- Request tracing without exposing secrets.
+- Appropriate caching for safe, reusable content.
+
+Never cache private student data in a way that could expose it to another user.
+
+Cache public concept metadata and suitable generated practice templates when safe.
+
+Do not cache model responses that depend on private session context across users.
+
+Use asynchronous processing only where it is genuinely beneficial.
+
+## 21. Admin and operational tools
+
+Build a protected administrative interface appropriate for a small startup.
+
+Include:
+
+- User and account overview.
+- AI request volume and error rates.
+- Aggregate usage metrics.
+- Model-provider configuration status.
+- Subscription and entitlement overview.
+- Reported issues.
+- Content or problem quality review.
+- Rate-limit configuration.
+- Basic system health information.
+
+Enforce server-side role checks.
+
+Never allow a user to become an administrator by editing their profile or sending a client-side role value.
+
+Do not expose private student content to administrators unnecessarily. Define appropriate access controls and retention policies.
+
+## 22. Analytics and product learning
+
+Add privacy-conscious product analytics.
+
+Measure meaningful events such as:
+
+- Landing-page visit.
+- Account creation.
+- First problem submitted.
+- First tutoring step completed.
+- Clarification requested.
+- Hint used.
+- Problem completed.
+- Practice problem attempted.
+- Return visit.
+- Subscription conversion, when billing exists.
+
+Track learning-quality indicators separately from engagement metrics.
+
+For example:
+
+- Independent correctness on a follow-up problem.
+- Ability to explain a concept.
+- Performance on a similar problem with different numbers.
+- Whether a previously observed misconception recurs.
+
+Do not equate time spent in the application with learning.
+
+Provide a way to disable optional analytics where appropriate and disclose relevant data collection.
+
+## 23. Testing requirements
+
+Do not consider the product complete merely because the application compiles.
+
+Write automated tests for critical functionality.
+
+### Unit tests
+
+Test:
+
+- Mathematical utility functions.
+- Equation transformation validation.
+- Response schema validation.
+- Session state transitions.
+- Hint progression.
+- Mastery-estimation rules.
+- Entitlement checks.
+- Rate-limit behavior.
+
+### Integration tests
+
+Test:
+
+- Authentication.
+- Database access.
+- User-specific data isolation.
+- AI provider abstraction.
+- Structured AI response handling.
+- Mathematical verification.
+- Session persistence and resumption.
+- Subscription state transitions where implemented.
+
+### End-to-end tests
+
+Verify the actual user journey:
+
+1. A new visitor opens the landing page.
+2. The visitor starts a demo or creates an account.
+3. The user enters a math problem.
+4. The tutor provides a first step.
+5. The student submits a correct response.
+6. The tutor advances.
+7. The student requests clarification.
+8. The tutor provides a meaningfully different explanation.
+9. The student makes an incorrect attempt.
+10. The tutor diagnoses and responds appropriately.
+11. The student requests a hint.
+12. The student completes the problem.
+13. The final answer is checked where possible.
+14. The session is saved.
+15. The user refreshes and resumes the session.
+16. The dashboard reflects actual activity.
+17. The user can delete the session.
+18. An unauthorized user cannot access the session.
+
+Test mobile layouts, keyboard navigation, loading states, API errors, malformed AI responses, duplicate requests, and expired authentication.
+
+Include representative mathematics tests for linear equations, quadratics, functions, and introductory calculus.
+
+A failed test must be investigated rather than silently skipped.
+
+## 24. Design for accessibility and usability
+
+Target WCAG 2.2 AA as a design objective, subject to actual verification.
+
+Include:
+
+- Semantic HTML.
+- Keyboard navigation.
+- Visible focus indicators.
+- Accessible labels.
+- Screen-reader announcements for important state changes.
+- Sufficient contrast.
+- Reduced-motion support.
+- Responsive mathematical expressions.
+- Accessible error messages.
+- Alternative textual descriptions for meaningful visualizations.
+
+Do not rely exclusively on color to indicate mathematical correctness.
+
+## 25. Production deployment
+
+Prepare the application for a real deployment.
+
+Include:
+
+- Production build configuration.
+- Environment variable documentation.
+- Database migrations.
+- Secure database policies.
+- Health checks where appropriate.
+- Error monitoring integration points.
+- Logging and observability.
+- Deployment instructions.
+- Backup and recovery considerations.
+- A safe procedure for applying schema changes.
+- A clear distinction between development and production configuration.
+
+Provide an `.env.example` containing variable names and placeholder descriptions, never actual secrets.
+
+Document all required environment variables, including the AI provider, database, authentication, payment provider, and optional monitoring services.
+
+Do not commit secrets to source control.
+
+If a deployment tool is available and correctly configured, deploy the application and verify it. Otherwise, leave it genuinely deployment-ready and provide the exact remaining setup steps.
+
+Do not claim the product is live, secure, compliant, or production-ready unless those claims have been verified to an appropriate extent.
+
+## 26. Implementation order
+
+Work through these phases in order, preserving a working application throughout.
+
+### Phase 1: Repository and architecture
+Inspect the existing project, document its current state, choose the architecture, and identify required environment variables.
+
+### Phase 2: Design system and public website
+Build the branding, responsive layout, landing page, navigation, and working interactive demonstration.
+
+### Phase 3: Authentication and persistence
+Implement or reuse authentication, protected routes, database migrations, and user data isolation.
+
+### Phase 4: Core tutor
+Implement the problem input, tutoring state machine, structured responses, hints, adaptive explanations, and final solution flow.
+
+### Phase 5: Mathematical tools
+Implement mathematical rendering, algebra interactions, graph exploration, and verification tools for the initial supported topics.
+
+### Phase 6: Learning intelligence
+Implement misconception diagnosis, concept prerequisites, mastery estimates, and adaptive practice.
+
+### Phase 7: Dashboard and history
+Implement saved sessions, resume functionality, concept maps, and meaningful progress reporting.
+
+### Phase 8: Commercial foundations
+Implement configurable entitlements, usage limits, subscription infrastructure, and billing integration when credentials are available.
+
+### Phase 9: Administration and observability
+Implement protected administrative tools, monitoring, error reporting, and operational safeguards.
+
+### Phase 10: Testing and hardening
+Run tests, fix defects, verify access controls, test responsive layouts, inspect the production build, and document deployment.
+
+Do not stop after the first attractive page. Continue until all feasible phases are implemented and verified.
+
+## 27. Definition of done
+
+The application is not complete until:
+
+- The public website works.
+- Registration and login work when configured.
+- Protected routes and database permissions are enforced.
+- A student can submit a mathematical problem.
+- The tutor can teach incrementally.
+- Student responses change the next action.
+- Confusion triggers adaptive explanations.
+- Hints work at multiple levels.
+- Mathematical notation renders correctly.
+- Interactive tools respond to student input.
+- Important mathematical results can be independently verified where supported.
+- The system tracks evidence of understanding.
+- The concept map and practice recommendations use real session data.
+- Sessions can be saved and resumed.
+- Errors are handled without losing progress unnecessarily.
+- AI requests are rate-limited and accounted for.
+- Sensitive credentials remain server-side.
+- Critical automated tests pass.
+- The production build succeeds.
+- Deployment and configuration instructions are complete.
+- Any unfinished integration is explicitly identified.
+
+## 28. How to work as the coding agent
+
+Use your tools to inspect, implement, run, test, and fix the application.
+
+Make reasonable technical decisions without repeatedly asking for approval on routine implementation details.
+
+When credentials, external account access, or business decisions are genuinely required, create the correct integration boundary and explain exactly what is missing.
+
+Do not invent successful API calls, payment transactions, test results, database records, or deployment outcomes.
+
+Do not leave core features as buttons that merely display alerts or placeholder screens.
+
+Do not substitute a mock implementation for a real integration without labeling it clearly.
+
+Do not remove working functionality to simplify the task.
+
+Do not rewrite the entire codebase if incremental changes are sufficient.
+
+Prioritize a coherent, reliable end-to-end learning experience over the number of features.
+
+At completion, provide:
+
+1. A concise summary of what was implemented.
+2. The main routes and features.
+3. The chosen architecture and AI provider.
+4. The database schema and migration status.
+5. The environment variables that must be configured.
+6. The tests run and their actual results.
+7. Any known limitations.
+8. Exact instructions to run and deploy the application.
+9. Any remaining steps needed before accepting paying customers.
+
+**Final product principle:**
+
+MathMind must not merely generate mathematical answers. It must help students investigate, reason, make mistakes safely, correct their thinking, and demonstrate what they have learned.
+
+Build a real learning product around that principle.
